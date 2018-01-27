@@ -18,6 +18,7 @@ void init();
 void keyboard(unsigned char key, int x, int y);
 void ndertoGraf(int);
 void lexoNeVektor(string s, vector <int> &v);
+string konvertoBinar(int);
 
 							// OpenGL Variables
 float kendiX = 0.0;
@@ -48,12 +49,12 @@ int main() {
 		exit(1);
 	}
 
-	else { //dmth u hap file-i
+	else { // u hap file-i
 
 		string in_line; // stringu ku do mbajme hyrjen nga file-i rresht pas rreshti
-		
+
 		cout << "\n\t Duke lexuar te dhenat...";
-		cout << "\n -------------------------------------------";
+		cout << "\n ------------------------------------------";
 		int i = 1; // mban rreshtin ku jemi aktualisht
 		while (input >> in_line) {
 			if (i == 2) { // dmth jemi te rreshti 2
@@ -79,14 +80,16 @@ int main() {
 				return 0;
 			}
 		}
-		cout << "Inputi u lexua me sukses! \n";
+		cout << "  Inputi u lexua me sukses! \n";
 	} // end leximin e file-it te inputit
-	
+
 	//------------------------------------------------------------------------------------------
 
 	Gjendje gj[6];
+	char emraGjendje[6] = { 'A', 'B', 'C', 'D', 'E', 'F' };
 	Gjendje *fundit0, *fundit1, *gjFundit; // gjendjet e fundit ku jane gjetur sekuencat 0 dhe 1
 	const int GJATESI = hyrje.size();
+	const int S_GJATESI = sekBinare.size();
 
 	if (hyrje[0] == 0) { // kontrollo per shifren e pare, ketu eshte 0
 
@@ -115,22 +118,17 @@ int main() {
 
 		fundit0 = &gj[0]; // dmth gjendja A
 		fundit1 = &gj[1]; // dmth gjendja B
-
-	/*	Gjendje *tmp = gj[0].getPasardhes(1); cout << "tmp: ";
-		tmp->afishoGjendje();*/
 	}
-	/*cout << "\n fundit 0: "; fundit0->afishoGjendje();
-	cout << "\n fundit 1: "; fundit1->afishoGjendje();*/
-	cout << "\nGjendja 0: \n";
-	gj[0].afishoGjendje();
+	gj[0].setEmer('A'); // vendosi emrin A, standarte
 	
-	for (int i = 1; i < GJATESI; i++) {
-		
-		if (hyrje[i] == 0){   // nqs shifra e rradhes eshte 0
+	int i;
+	for (i = 1; i < GJATESI; i++) {
+
+		if (hyrje[i] == 0) {   // nqs shifra e rradhes eshte 0
 
 			gj[i].setPasardhes(0, gj[i + 1]); // do kalojme te gjendja pasardhese i+1 me 0
-			gj[i].setPasardhes(1, *fundit1);  
-			
+			gj[i].setPasardhes(1, *fundit1);
+
 			if (i == GJATESI - 1) // dmth jemi te fundi
 				gj[i].setRezultat(0, 1);
 			else
@@ -155,11 +153,11 @@ int main() {
 			s.append("1");
 			gj[i + 1].setSekuence(s);
 		}
-		gjFundit = &gj[i+1];
-		cout << "Gjendja: " << i << endl;
-		gj[i].afishoGjendje();
+		gjFundit = &gj[i + 1];
+		gj[i].setEmer(emraGjendje[i]); // vendosi nje char si emer
 	}
-	
+	gjFundit->setEmer(emraGjendje[i]);
+
 	string s = gjFundit->getSekuence();
 	s.append("0"); // do shofim ku do shkoje me kalim me 0
 	for (int i = 1; i < GJATESI; i++) { // fillon nga i qe ne substring te mos kapim shifren e pare te sekuences por nga e dyta deri ne fund
@@ -173,7 +171,6 @@ int main() {
 					gjFundit->setRezultat(0, 1);
 				else
 					gjFundit->setRezultat(0, 0); // perndryshe rezultati do jete 0
-				//cout << "\n substring: " << sub_sekuence << endl;
 				break;
 			}
 		}
@@ -184,10 +181,10 @@ int main() {
 			gjFundit->setRezultat(1, 0);
 		}
 	}
-	
-	 // e njejta gje si me siper, vetem se per kalimin me 1
+
+	// e njejta gje si me siper, vetem se per kalimin me 1
 	s = gjFundit->getSekuence();
-	s.append("1"); 
+	s.append("1");
 	for (int i = 1; i < GJATESI; i++) {
 		bool found = false;
 		string sub_sekuence = s.substr(i);
@@ -195,7 +192,7 @@ int main() {
 		for (int j = GJATESI + 1; j >= 0; j--) {
 			if (gj[j].getSekuence() == sub_sekuence) {
 				found = true;
-				gjFundit->setPasardhes(1, gj[j]); 
+				gjFundit->setPasardhes(1, gj[j]);
 				if (sub_sekuence == s_hyrje)
 					gjFundit->setRezultat(1, 1);
 				else
@@ -205,26 +202,63 @@ int main() {
 		}
 		if (found)
 			break;
-		if (i == GJATESI - 1 && !found) { // nqs jemi ne fund dhe s'kemi gjetur gje
+		if (i == GJATESI - 1 && !found) { 
 			gjFundit->setPasardhes(1, *fundit1);
 			gjFundit->setRezultat(1, 0);
 		}
-
 	}
-	
-	cout << "Gjendja e fundit: \n";
-	gjFundit->afishoGjendje();
 
+	Gjendje *gjTani = &gj[0];
+	for (int i = 0; i < S_GJATESI; i++) {
+		//cout << "i = " << i << endl;
+		//gjTani->afishoGjendje();
+		if (sekBinare[i] == 0)
+			gjTani = gjTani->getPasardhes(0);
+		else // sekBinare[i] == 1
+			gjTani = gjTani->getPasardhes(1);
+		if (gjTani == gjFundit) { // dmth jemi ne fund te hyrjes
+			cout << "\n  Pozicioni i hyrjes: " << i - hyrje.size() << " -> ";
+			cout << 1;
+		}
+	}
 
+	cout << "\n-------------------------------------------\n";;
+	cout << "\n\t Tabela e Gjendjeve: \n\n";
+	cout << "Kodimi\t" << "Gjendja\t" << "X = 0\t" << "X = 1\t" << "Rez. 0\t" << "Rez. 1\n"; //formatuar cuditshem qe te jete me i lexueshem
+	cout << "-------------------------------------------------------\n";
+	for (int i = 0; i < GJATESI + 1; i++) {
+		
+		int rezultat_0 = gj[i].getRezultat(0); // kap vlerat e rezulatateve
+		int rezultat_1 = gj[i].getRezultat(1);
+		cout << konvertoBinar(i) << "\t" << emraGjendje[i] << "\t"
+			<< gj[i].getPasardhes(0)->getEmer() << "\t" << gj[i].getPasardhes(1)->getEmer() << "\t" 
+			<< rezultat_0 << "\t" << rezultat_1 << endl << endl;
+	}
 	return 0;
 }
 
+
 void lexoNeVektor(string s, vector <int> &v) {
 	stringstream ss_line(s); // perdorim stringstream qe te kapim shifrat
-	int len = s.length();
+	size_t len = s.length();
 	for (int i = 0; i < len; i++) {
 		char tmp = ss_line.get(); // merr shifren e rradhes
 		int itmp = tmp - '0'; // konverto nga char ne int
 		v.push_back(itmp); // shto tek vektori
 	}
+}
+string konvertoBinar(int nr) {
+	vector <int> v;
+	int mbetje = 0;
+	string binar;
+	do {
+		mbetje = nr % 2;
+		nr = nr / 2;
+		v.push_back(mbetje);
+	} while (nr != 0);
+	for (int i = v.size() - 1; i >= 0; i--) { // lexo mbrapsht vektorin
+		char tmp = '0' + v[i];
+		binar.push_back(tmp);
+	}
+	return binar;
 }

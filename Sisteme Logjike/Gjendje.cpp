@@ -45,9 +45,20 @@ void Gjendje::appendSekuence(std::string s)
 	this->sek.append(s);
 }
 
+char Gjendje::getEmer()
+{
+	return this->emer;
+}
+
+void Gjendje::setEmer(char c)
+{
+	this->emer = c;
+}
+
 void Gjendje::afishoGjendje()
 {
 	std::cout << "Gjendja: " << this << "\n";
+	std::cout << "Emri: " << this->emer << "\n";
 	std::cout << "Kalimi me 0: " << this->pas[0] << " me rezultat " << rezultat[0] << "\n";
 	std::cout << "Kalimi me 1: " << this->pas[1] << " me rezultat " << rezultat[1] << "\n";
 	std::cout << "Sekuenca: " << this->sek << "\n\n";

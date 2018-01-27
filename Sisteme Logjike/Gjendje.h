@@ -7,6 +7,7 @@ class Gjendje
 
 private: 
 	Gjendje * pas[2];
+	char emer;
 	int rezultat[2];
 	std::string sek;
 
@@ -23,6 +24,9 @@ public:
 	std::string getSekuence();
 	void setSekuence(std::string s);
 	void appendSekuence(std::string s);
+
+	char getEmer();
+	void setEmer(char c);
 
 	void afishoGjendje();
 };
