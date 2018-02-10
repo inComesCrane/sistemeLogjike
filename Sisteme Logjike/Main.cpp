@@ -78,8 +78,8 @@ int main(int argc, char **argv) {
 			cout << "\n\n Hyrja nuk mund te jete bosh! Rregulloni hyrjen dhe provoni perseri. \n\n";
 			return 0;
 		}
-		if (hyrje.size() > 6) {
-			cout << "\n\n Hyrja nuk mund te jete me e madhe se 6 shifra! Rregulloni hyrjen dhe provoni perseri. \n\n";
+		if (hyrje.size() < 2 || hyrje.size() > 6) {
+			cout << "\n\n Hyrja nuk mund te jete me e vogel se 2 ose me e madhe se 6 shifra! Rregulloni hyrjen dhe provoni perseri. \n\n";
 			return 0;
 		}
 		if (sekBinare.empty()) {
@@ -97,6 +97,10 @@ int main(int argc, char **argv) {
 				cout << "\n\n Sekuenca binare permban shifra qe nuk jane 0/1. Rregulloni sekuencen dhe provoni perseri. \n\n ";
 				return 0;
 			}
+		}
+		if (sekBinare.size() < hyrje.size()) {
+			cout << "\n\n Sekuenca binare nuk mund te jete me e vogel se hyrja! Rregulloni inputin dhe provoni perseri.\n";
+			return 0;
 		}
 		cout << "\n  Inputi u lexua me sukses! \n";
 	} // end leximin e file-it te inputit
@@ -137,10 +141,10 @@ int main(int argc, char **argv) {
 		fundit0 = &gj[0];				// dmth gjendja A
 		fundit1 = &gj[1];				// dmth gjendja B
 	}
-	gj[0].setEmer('A');									// vendosi emrin A
+	gj[0].setEmer('A');					// vendosi emrin A
 	
 	int i;
-	for (i = 1; i < H_GJATESI; i++) {					// nga shifra e dyte e hyrjes deri ne fund te saj, pasi shifra e pare eshte trajtuar me siper
+	for (i = 1; i < H_GJATESI; i++) {			// nga shifra e dyte e hyrjes deri ne fund te saj, pasi shifra e pare eshte trajtuar me siper
 		if (hyrje[i] == 0) {					// nqs shifra e rradhes eshte 0
 			gj[i].setPasardhes(0, gj[i + 1]);	// do kalojme te gjendja pasardhese i+1 me 0
 			gj[i].setPasardhes(1, *fundit1);
@@ -245,8 +249,8 @@ int main(int argc, char **argv) {
 	cout << "\n\t Tabela e Gjendjeve: \n\n";
 	cout << "Kodimi\t" << "Gjendja\t" << "X = 0\t" << "X = 1\t" << "Rez. 0\t" << "Rez. 1\n"; //formatuar cuditshem qe te jete me i lexueshem
 	cout << "-------------------------------------------------------\n";
-	for (int i = 0; i <= H_GJATESI; i++) {
-		cout << konvertoBinar(i) << "\t" << emraGjendje[i] << "\t"
+	for (int i = 0; i <= H_GJATESI; i++) {														// kap te gjithe gjendjet
+		cout << konvertoBinar(i) << "\t" << emraGjendje[i] << "\t"								// afisho te dhenat e tyre
 			<< gj[i].getPasardhes(0)->getEmer() << "\t" << gj[i].getPasardhes(1)->getEmer() << "\t" 
 			<< gj[i].getRezultat(0) << "\t" << gj[i].getRezultat(1) << endl << endl;
 	}
@@ -351,7 +355,7 @@ void display() {
 	glFlush();
 }
 
-void ndertoGraf(const int nrGjendje) {
+void ndertoGraf(const int nrGjendje) {									// ndertimi i sferave qe paraqesinn gjendjet
 	float zhvendosX = -0.5 * (nrGjendje - 1) * (rreze * 2 + largesi);	// qenderzo
 	glColor4d(0.25, 0.46, 0.83, 1.0);
 	for (int i = 0; i < nrGjendje; i++) {
@@ -365,7 +369,7 @@ void ndertoGraf(const int nrGjendje) {
 	}
 }
 
-void krijoHark(float x1, float x2, int kalim) {
+void krijoHark(float x1, float x2, int kalim) {							// ndertimi i harqeve qe paraqesin kalimet mbrapa
 	float pi = M_PI;
 	float rr = (x2 - x1) / 2;
 
@@ -387,7 +391,7 @@ void krijoHark(float x1, float x2, int kalim) {
 	glPopMatrix();
 }
 
-void krijoVije(float x1, float x2, int kalim) {
+void krijoVije(float x1, float x2, int kalim) {						// ndertimi i vijave qe tregojne kalimet para
 	int ngjyre = 0;
 	if (kalim == 0)
 		ngjyre = 0;
@@ -405,7 +409,7 @@ void krijoVije(float x1, float x2, int kalim) {
 	glPopMatrix();
 }
 
-void krijoRreth( float x, int kalim) {
+void krijoRreth( float x, int kalim) {							// nderton rathet qe tregojne kalimet qe e lene ne vete
 	int ngjyre = 0;
 	if (kalim == 0)
 		ngjyre = 0;

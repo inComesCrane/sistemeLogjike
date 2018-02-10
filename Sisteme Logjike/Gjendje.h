@@ -32,6 +32,6 @@ public:
 
 	bool rriNeVend(int i);
 
-	bool operator==(Gjendje gj1ju);
+	bool operator==(Gjendje gj1);
 };
 
